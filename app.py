@@ -43,7 +43,7 @@ def create_machine():
         cur = mysql.connection.cursor()
         loc = content['location']
         query_statement = f"INSERT INTO machines(location) VALUES ('{loc}')"
-        result_value = cur.execute(query_statement)
+        cur.execute(query_statement)
         mysql.connection.commit()
         cur.close()
         print(content['location'])
@@ -51,9 +51,20 @@ def create_machine():
     return jsonify(content)
 
 
-@app.route('/delete-machine/', methods=['GET'])
+@app.route('/delete-machine/', methods=['POST'])
 def delete_machine():
-    return None
+    if request.method == 'POST':
+        content = request.get_json(silent=True)
+        cur = mysql.connection.cursor()
+        machine_id = content['id']
+        query_statement = f"DELETE from machines WHERE machine_id = {machine_id}"
+        cur.execute(query_statement)
+        mysql.connection.commit()
+        cur.close()
+        print(content['id'])
+        # Maybe redirect to read_machine function or add a get method in the same link
+    return jsonify(None)
 
 if __name__ == '__main__':
     app.run(debug=True)
+
