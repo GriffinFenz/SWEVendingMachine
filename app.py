@@ -37,7 +37,20 @@ def read_machine():
     return jsonify(None)
 
 
-@app.route('/create-machine/', methods=['POST'])
+@app.route('/all-machines', methods=['GET'])
+def read_all_machines():
+    if request.method == 'GET':
+        cur = mysql.connection.cursor()
+        query_statement = f"SELECT * from machines"
+        result = cur.execute(query_statement)
+        if result > 0:
+            machines = cur.fetchall()
+            cur.close()
+            return jsonify(machines)
+    return jsonify(None)
+
+
+@app.route('/machine/create', methods=['POST'])
 def create_machine():
     if request.method == 'POST':
         content = request.get_json(silent=True)
@@ -56,7 +69,7 @@ def create_machine():
     return jsonify(content)
 
 
-@app.route('/delete-machine/', methods=['POST'])
+@app.route('/machine/delete', methods=['POST'])
 def delete_machine():
     if request.method == 'POST':
         content = request.get_json(silent=True)
