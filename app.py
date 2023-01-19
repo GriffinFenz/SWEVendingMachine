@@ -20,7 +20,6 @@ def index():
     return render_template("index.html")
 
 
-# @app.route('/table/<int:id>/', methods=['GET'])
 @app.route('/machine', methods=['GET'])
 def read_machine():
     id = request.args.get("id")
@@ -28,10 +27,16 @@ def read_machine():
         return jsonify(None)
     cur = mysql.connection.cursor()
     query_statement = f"SELECT * from machines WHERE machine_id = {id}"
-    result_value = cur.execute(query_statement)
-    if result_value > 0:
+    query_statement_2 = f"SELECT * from machine_products WHERE machine_id = {id}"
+    machines = cur.execute(query_statement)
+    if machines > 0:
         machine = cur.fetchone()
-        if request.method == 'GET':
+        products = cur.execute(query_statement_2)
+        if products > 0:
+            product = cur.fetchall()
+            cur.close()
+            return jsonify(machine, product)
+        else:
             cur.close()
             return jsonify(machine)
     return jsonify(None)
@@ -59,14 +64,16 @@ def create_machine():
         cur = mysql.connection.cursor()
         try:
             loc = content['location']
+            name = content['machine_name']
         except KeyError:
             return jsonify(None)
-        query_statement = f"INSERT INTO machines(location) VALUES ('{loc}')"
+        query_statement = f"INSERT INTO machines(location, machine_name) VALUES ('{loc}', '{name}')"
         cur.execute(query_statement)
         mysql.connection.commit()
         cur.close()
-        # Maybe redirect to read_machine function or add a get method in the same link
-    return jsonify(content)
+        # Maybe redirect
+        return jsonify(content)
+    return jsonify(None)
 
 
 @app.route('/machine/delete', methods=['POST'])
@@ -86,8 +93,27 @@ def delete_machine():
         cur.execute(query_statement)
         mysql.connection.commit()
         cur.close()
-        # Maybe redirect to read_machine function or add a get method in the same link
+        # Maybe redirect
     return jsonify(None)
+
+
+@app.route('/machine/edit', methods=['POST'])
+def edit_machine():
+    content = request.get_json(silent=True)
+    if content is None:
+        return jsonify(None)
+    try:
+        machine_id = content['id']
+        name = content['machine_name']
+        loc = content['location']
+    except KeyError:
+        return jsonify(None)
+    cur = mysql.connection.cursor()
+    query_statement = f"UPDATE machines SET machine_name = '{name}', location = '{loc}' WHERE machine_id = {machine_id}"
+    cur.execute(query_statement)
+    mysql.connection.commit()
+    cur.close()
+    return jsonify(content)
 
 
 @app.route('/item/', methods=['GET'])
@@ -117,6 +143,66 @@ def read_all_items():
             cur.close()
             return jsonify(items)
     return jsonify(None)
+
+
+@app.route('/item/create', methods=['POST'])
+def create_item():
+    if request.method == 'POST':
+        content = request.get_json(silent=True)
+        if content is None:
+            return jsonify(None)
+        cur = mysql.connection.cursor()
+        try:
+            name = content['item_name']
+            price = int(content['price'])
+        except KeyError and ValueError:
+            return jsonify(None)
+        query_statement = f"INSERT INTO items(item_name, price) VALUES ('{name}', {price})"
+        cur.execute(query_statement)
+        mysql.connection.commit()
+        cur.close()
+        # Maybe redirect
+        return jsonify(content)
+    return jsonify(None)
+
+
+@app.route('/item/delete', methods=['POST'])
+def delete_item():
+    if request.method == 'POST':
+        content = request.get_json(silent=True)
+        if content is None:
+            return jsonify(None)
+        cur = mysql.connection.cursor()
+        try:
+            item_id = content['id']
+        except KeyError:
+            return jsonify(None)
+        query_statement = f"DELETE from machine_products WHERE item_id = {item_id}"
+        cur.execute(query_statement)  # Hoping for a better way to delete from both tables at once
+        query_statement = f"DELETE from items WHERE item_id = {item_id}"
+        cur.execute(query_statement)
+        mysql.connection.commit()
+        cur.close()
+        # Maybe redirect
+    return jsonify(None)
+
+
+@app.route('/item/edit', methods=['POST'])
+def edit_item():
+    content = request.get_json(silent=True)
+    if content is None:
+        return jsonify(None)
+    try:
+        item_id = content['id']
+        price = content['price']
+    except KeyError:
+        return jsonify(None)
+    cur = mysql.connection.cursor()
+    query_statement = f"UPDATE items SET price = '{price}' WHERE item_id = {item_id}"
+    cur.execute(query_statement)
+    mysql.connection.commit()
+    cur.close()
+    return jsonify(content)
 
 
 if __name__ == '__main__':
