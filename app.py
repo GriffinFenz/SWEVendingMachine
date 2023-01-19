@@ -23,8 +23,9 @@ def index():
 # @app.route('/table/<int:id>/', methods=['GET'])
 @app.route('/machine', methods=['GET'])
 def read_machine():
-    #Try Except or check for None to not break
     id = request.args.get("id")
+    if id is None:
+        return jsonify(None)
     cur = mysql.connection.cursor()
     query_statement = f"SELECT * from machines WHERE machine_id = {id}"
     result_value = cur.execute(query_statement)
@@ -40,13 +41,17 @@ def read_machine():
 def create_machine():
     if request.method == 'POST':
         content = request.get_json(silent=True)
+        if content is None:
+            return jsonify(None)
         cur = mysql.connection.cursor()
-        loc = content['location']
+        try:
+            loc = content['location']
+        except KeyError:
+            return jsonify(None)
         query_statement = f"INSERT INTO machines(location) VALUES ('{loc}')"
         cur.execute(query_statement)
         mysql.connection.commit()
         cur.close()
-        print(content['location'])
         # Maybe redirect to read_machine function or add a get method in the same link
     return jsonify(content)
 
@@ -55,16 +60,51 @@ def create_machine():
 def delete_machine():
     if request.method == 'POST':
         content = request.get_json(silent=True)
+        if content is None:
+            return jsonify(None)
         cur = mysql.connection.cursor()
-        machine_id = content['id']
+        try:
+            machine_id = content['id']
+        except KeyError:
+            return jsonify(None)
+        query_statement = f"DELETE from machine_products WHERE machine_id = {machine_id}"
+        cur.execute(query_statement)  # Hoping for a better way to delete from both tables at once
         query_statement = f"DELETE from machines WHERE machine_id = {machine_id}"
         cur.execute(query_statement)
         mysql.connection.commit()
         cur.close()
-        print(content['id'])
         # Maybe redirect to read_machine function or add a get method in the same link
     return jsonify(None)
 
+
+@app.route('/item/', methods=['GET'])
+def read_item():
+    id = request.args.get("id")
+    if id is None:
+        return jsonify(None)
+    cur = mysql.connection.cursor()
+    query_statement = f"SELECT * from items WHERE item_id = {id}"
+    result_value = cur.execute(query_statement)
+    if result_value > 0:
+        item = cur.fetchone()
+        if request.method == 'GET':
+            cur.close()
+            return jsonify(item)
+    return jsonify(None)
+
+
+@app.route('/all-items/', methods=['GET'])
+def read_all_items():
+    if request.method == 'GET':
+        cur = mysql.connection.cursor()
+        query_statement = f"SELECT * from items"
+        result = cur.execute(query_statement)
+        if result > 0:
+            items = cur.fetchall()
+            cur.close()
+            return jsonify(items)
+    return jsonify(None)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
-
