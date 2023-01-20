@@ -67,6 +67,8 @@ def create_machine():
             name = content['machine_name']
         except KeyError:
             return jsonify(None)
+        if check_machine_duplicates(name, loc):
+            return jsonify(None)
         query_statement = f"INSERT INTO machines(location, machine_name) VALUES ('{loc}', '{name}')"
         cur.execute(query_statement)
         mysql.connection.commit()
@@ -103,10 +105,12 @@ def edit_machine():
     if content is None:
         return jsonify(None)
     try:
-        machine_id = content['id']
-        name = content['machine_name']
+        machine_id = content['machine_id']
         loc = content['location']
+        name = content['machine_name']
     except KeyError:
+        return jsonify(None)
+    if check_machine_duplicates(name, loc):
         return jsonify(None)
     cur = mysql.connection.cursor()
     query_statement = f"UPDATE machines SET machine_name = '{name}', location = '{loc}' WHERE machine_id = {machine_id}"
@@ -230,6 +234,45 @@ def add_stock_in_machine():
         return jsonify(content)
     cur.close()
     return jsonify(None)
+
+
+@app.route('/stock/edit', methods=['POST'])
+def edit_machine_stock():
+    content = request.get_json(silent=True)
+    if content is None:
+        return jsonify(None)
+    try:
+        machine_id = content['machine_id']
+        item_id = content['item_id']
+        amount = int(content['amount'])
+    except KeyError or ValueError:
+        return jsonify(None)
+    cur = mysql.connection.cursor()
+    query_machine = f"SELECT * FROM machines WHERE machine_id = '{machine_id}'"
+    query_item = f"SELECT * FROM items WHERE item_id = '{item_id}'"
+    machines = cur.execute(query_machine)
+    items = cur.execute(query_item)
+    if machines > 0 and items > 0:
+        query_stock = f"UPDATE machine_products SET quantity = '{amount}'" \
+                      f"WHERE (machine_id, item_id) = ('{machine_id}', '{item_id}')"
+        cur.execute(query_stock)
+        mysql.connection.commit()
+        cur.close()
+        return jsonify(content)
+    cur.close()
+    return jsonify(None)
+
+
+# Returns true if machine already exists in the database
+def check_machine_duplicates(name, location) -> bool:
+    cur = mysql.connection.cursor()
+    query = f"SELECT * FROM machines WHERE (location, machine_name) = ('{location}', '{name}')"
+    result = cur.execute(query)
+    cur.close()
+    if result > 0:
+        return True
+    return False
+
 
 if __name__ == '__main__':
     app.run(debug=True)
