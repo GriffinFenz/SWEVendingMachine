@@ -84,11 +84,11 @@ def delete_machine():
         content = request.get_json(silent=True)
         if content is None:
             return jsonify(None)
-        cur = mysql.connection.cursor()
         try:
-            machine_id = content['id']
+            machine_id = content['machine_id']
         except KeyError:
             return jsonify(None)
+        cur = mysql.connection.cursor()
         query_statement = f"DELETE from machine_products WHERE machine_id = {machine_id}"
         cur.execute(query_statement)  # Hoping for a better way to delete from both tables at once
         query_statement = f"DELETE from machines WHERE machine_id = {machine_id}"
@@ -178,7 +178,7 @@ def delete_item():
             return jsonify(None)
         cur = mysql.connection.cursor()
         try:
-            item_id = content['id']
+            item_id = content['item_id']
         except KeyError:
             return jsonify(None)
         query_statement = f"DELETE from machine_products WHERE item_id = {item_id}"
