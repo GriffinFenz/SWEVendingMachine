@@ -155,7 +155,7 @@ def create_item():
         try:
             name = content['item_name']
             price = int(content['price'])
-        except KeyError and ValueError:
+        except KeyError or ValueError:
             return jsonify(None)
         query_statement = f"INSERT INTO items(item_name, price) VALUES ('{name}', {price})"
         cur.execute(query_statement)
@@ -204,6 +204,32 @@ def edit_item():
     cur.close()
     return jsonify(content)
 
+
+@app.route('/stock/add', methods=['POST'])
+def add_stock_in_machine():
+    content = request.get_json(silent=True)
+    if content is None:
+        return jsonify(None)
+    try:
+        machine_id = content['machine_id']
+        item_id = content['item_id']
+        amount = int(content['amount'])
+    except KeyError or ValueError:
+        return jsonify(None)
+    cur = mysql.connection.cursor()
+    query_machine = f"SELECT * FROM machines WHERE machine_id = '{machine_id}'"
+    query_item = f"SELECT * FROM items WHERE item_id = '{item_id}'"
+    machines = cur.execute(query_machine)
+    items = cur.execute(query_item)
+    if machines > 0 and items > 0:
+        query_stock = f"INSERT INTO machine_products(machine_id, item_id, quantity)" \
+                      f" VALUES ('{machine_id}', '{item_id}', {amount})"
+        cur.execute(query_stock)
+        mysql.connection.commit()
+        cur.close()
+        return jsonify(content)
+    cur.close()
+    return jsonify(None)
 
 if __name__ == '__main__':
     app.run(debug=True)
