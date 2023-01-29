@@ -4,7 +4,7 @@ import yaml
 
 app = Flask(__name__)
 
-cred = yaml.load(open('../cred.yaml'), Loader=yaml.Loader)
+cred = yaml.load(open('../../cred.yaml'), Loader=yaml.Loader)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 host = cred['mysql_host']
 user = cred['mysql_user']
