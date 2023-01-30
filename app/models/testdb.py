@@ -1,11 +1,11 @@
-from app.app import db, app
+from app.extensions import db
 from app.models.machines import Machines
 from app.models.products import Products
 from app.models.machine_stock import MachineStock
 
 
-if __name__ == '__main__':
-    with app.app_context():
+def run_db(flask_app):
+    with flask_app.app_context():
         db.drop_all()
         db.create_all()
 
@@ -28,4 +28,3 @@ if __name__ == '__main__':
 
         # Products.query.filter_by(product_id=2).delete()
         # db.session.commit()
-        

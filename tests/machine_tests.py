@@ -1,5 +1,5 @@
 # Assuming the database is already setup according to the vendingmachinescript.sql file in scripts directory
-from app.app import read_all_machines
+from app import read_all_machines
 
 
 # It just complains at me when I run it so imma not include it
