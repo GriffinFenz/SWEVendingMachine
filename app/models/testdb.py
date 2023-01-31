@@ -17,6 +17,7 @@ def run_db(flask_app):
 
         stock1 = MachineStock(machine_id='1', product_id='1', stock_quantity='5')
         stock2 = MachineStock(machine_id='1', product_id='2', stock_quantity='5')
+        stock3 = MachineStock(machine_id='2', product_id='1', stock_quantity='1')
 
         db.session.add(machine1)
         db.session.add(machine2)
@@ -24,6 +25,7 @@ def run_db(flask_app):
         db.session.add(product2)
         db.session.add(stock1)
         db.session.add(stock2)
+        db.session.add(stock3)
         db.session.commit()
 
         # Products.query.filter_by(product_id=2).delete()
