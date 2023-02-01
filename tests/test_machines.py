@@ -1,27 +1,26 @@
-import requests
+import pytest
 
-ENDPOINT = "http://127.0.0.1:5000/"
-
-
-# It just complains at me when I run it so imma not include it
-
-def test_read_machine_1():
-    machine_id_one = requests.get(ENDPOINT + f"/machine?id=1")
-
-    json_response = machine_id_one.json()
-
-    machine_name = json_response["machine_name"]
-    machine_location = json_response["machine_location"]
-    assert machine_location == "yes" and machine_name == "Bob"
+from app.extensions import db
+from tests.conftest import Tester
 
 
-def test_read_machine_2():
-    machine_id_two = requests.get(ENDPOINT + f"/all-machines")
-    print(machine_id_two)
+@pytest.fixture()
+def tester(client):
+    return MachineTester(test_client=client)
 
-    json_response = machine_id_two.json()
 
-    machine_name = json_response[1]["machine_name"]
-    machine_location = json_response[1]["machine_location"]
-    assert machine_location == "yes too" and machine_name == "BetterBob"
+class MachineTester(Tester):
+    def get_machine(self, machine_id):
+        return self.test_client.get("/machine", query_string={"id": machine_id})
 
+
+def test_get_machine(tester):
+    get_response = tester.get_machine("1")
+    assert Tester.expect(get_response, 200)
+
+    machine = get_response.json.get("Machine")
+
+    assert machine is not None
+
+    assert machine.get("machine_name") == "Bob"
+    assert machine.get("machine_location") == "here"

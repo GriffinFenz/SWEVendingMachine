@@ -1,4 +1,4 @@
-# Vending Machine Project 
+# Vending Machine Project
 By: Naphong Chadha 6380797
 
 ---
@@ -39,12 +39,12 @@ This will generate the test database in the app -> models -> test.db file
 
 
 #### Machines:
-1. "127.0.0.1:5000/machine?id=1" </br> 
+1. "127.0.0.1:5000/machine?id=1" </br>
     Viewing the contents of one vending machine </br>
     GET Method
 
 
-2. "127.0.0.1:5000/all-machines" </br> 
+2. "127.0.0.1:5000/all-machines" </br>
     View all the vending machines in MUIC </br>
     GET Method
 
@@ -69,12 +69,12 @@ This will generate the test database in the app -> models -> test.db file
 
 #### Products/Items:
 
-1. "127.0.0.1:5000/product?id=1" </br> 
+1. "127.0.0.1:5000/product?id=1" </br>
     Viewing the contents of one product </br>
     GET Method
 
 
-2. "127.0.0.1:5000/all-products" </br> 
+2. "127.0.0.1:5000/all-products" </br>
     View all the products available </br>
     GET Method
 

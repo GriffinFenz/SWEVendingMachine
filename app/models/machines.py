@@ -1,19 +1,24 @@
-from app.extensions import db
 from dataclasses import dataclass
+
+from app.extensions import db
 
 
 @dataclass
 class Machines(db.Model):
-    __tablename__ = 'Machines'
+    __tablename__ = "Machines"
     machine_id: int
     machine_name: str
     machine_location: str
 
-    machine_id = db.Column('machine_id', db.Integer, primary_key=True, autoincrement=True)
-    machine_name = db.Column('machine_name', db.String(20), unique=True, nullable=False)
-    machine_location = db.Column('machine_location', db.String(150), nullable=False)
+    machine_id = db.Column(
+        "machine_id", db.Integer, primary_key=True, autoincrement=True
+    )
+    machine_name = db.Column("machine_name", db.String(20), unique=True, nullable=False)
+    machine_location = db.Column("machine_location", db.String(150), nullable=False)
 
-    products = db.relationship("MachineStock", backref="Machines", lazy=True, passive_deletes=True)
+    products = db.relationship(
+        "MachineStock", backref="Machines", lazy=True, passive_deletes=True
+    )
 
     @staticmethod
     def find_by_id(machine_id):
@@ -27,7 +32,9 @@ class Machines(db.Model):
     def add_machine(machine_name, machine_location):
         machine_exists = Machines.find_by_name(machine_name)
         if machine_exists is None:
-            new_machine = Machines(machine_name=machine_name, machine_location=machine_location)
+            new_machine = Machines(
+                machine_name=machine_name, machine_location=machine_location
+            )
             db.session.add(new_machine)
             db.session.commit()
             return True

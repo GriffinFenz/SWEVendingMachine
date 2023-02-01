@@ -6,11 +6,12 @@ authors = ["Naphong Chadha <harrajc@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">3.7"
+python = ">=3.8"
 pytest = "^7.2.1"
 pyyaml = "^6.0"
 sqlalchemy = "^2.0.0"
 flask-sqlalchemy = "^3.0.2"
+pre-commit = "^3.0.2"
 
 [tool.poetry.dev-dependencies]
 
