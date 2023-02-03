@@ -1,4 +1,3 @@
-import yaml
 from flask import Flask
 
 from app.extensions import db
@@ -7,16 +6,16 @@ from app.extensions import db
 def create_app() -> Flask:
     app = Flask(__name__)
 
-    # /Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine
-    cred = yaml.load(
-        open("./cred.yaml"),
-        Loader=yaml.Loader,
-    )  # Fix this line
+    # # /Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine
+    # cred = yaml.load(
+    #     open("./cred.yaml"),
+    #     Loader=yaml.Loader,
+    # )  # Fix this line
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    host = cred["mysql_host"]
-    user = cred["mysql_user"]
-    password = cred["mysql_password"]
-    db_name = cred["mysql_db"]
+    host = "localhost"
+    user = "root"
+    password = "iccsroot"
+    db_name = "VendingMachine"
 
     # Issue with not being able to install mysqlclient, so I did pip install pymysql to fix this
     app.config[
