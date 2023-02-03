@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 
 from app.models.machines import Machines
 
@@ -6,19 +6,19 @@ machine_bp = Blueprint("machines", __name__)
 
 
 @machine_bp.route("/machine", methods=["GET"])
-def get_machine():
+def get_machine() -> Response:
     machine_id = request.args.get("id")
     machine = Machines.find_by_id(machine_id)
     return jsonify(Machine=machine, STATUS_CODE=200)
 
 
 @machine_bp.route("/all-machines", methods=["GET"])
-def get_all_machines():
+def get_all_machines() -> Response:
     return jsonify(Machine=Machines.query.all(), STATUS_CODE=200)
 
 
 @machine_bp.route("/machine/create", methods=["POST"])
-def create_machine():
+def create_machine() -> Response:
     content = request.get_json(silent=True)
     try:
         location = content["location"]
@@ -36,7 +36,7 @@ def create_machine():
 
 
 @machine_bp.route("/machine/delete", methods=["DELETE"])
-def delete_machine():
+def delete_machine() -> Response:
     content = request.get_json(silent=True)
     try:
         machine_id = content["machine_id"]
@@ -59,7 +59,7 @@ def delete_machine():
 
 
 @machine_bp.route("/machine/edit", methods=["PUT"])
-def edit_machine():
+def edit_machine() -> Response:
     content = request.get_json(silent=True)
     try:
         machine_id = content["machine_id"]

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 import pytest
+from flask import Response
 from flask.testing import FlaskClient
 
 from app import create_app
@@ -32,5 +33,5 @@ class Tester:
     test_client: FlaskClient
 
     @staticmethod
-    def expect(response, code):
+    def expect(response, code) -> Response:
         return response.json.get("STATUS_CODE") == code

@@ -27,7 +27,7 @@ class ProductTester(Tester):
         return self.test_client.put("/product/edit", json=json)
 
 
-def test_get_product(tester):
+def test_get_product(tester) -> TestResponse:
     get_response = tester.get_product("1")
     assert Tester.expect(get_response, 200)
 
@@ -39,7 +39,7 @@ def test_get_product(tester):
     assert product.get("product_price") == "20.00"
 
 
-def test_get_all_products(tester):
+def test_get_all_products(tester) -> TestResponse:
     get_response = tester.get_all_products()
     assert Tester.expect(get_response, 200)
 
@@ -53,7 +53,7 @@ def test_get_all_products(tester):
     assert product_2.get("product_price") == "100.00"
 
 
-def test_create_product_success(tester):
+def test_create_product_success(tester) -> TestResponse:
     json = {"product_name": "Sprite", "price": 10}
     get_response = tester.create_product(json)
     assert Tester.expect(get_response, 200)
@@ -66,7 +66,7 @@ def test_create_product_success(tester):
     assert product.get("product_price") == "10.00"
 
 
-def test_create_product_key_error(tester):
+def test_create_product_key_error(tester) -> TestResponse:
     json = {"a": "a", "b": "b"}
     get_response = tester.create_product(json)
     assert Tester.expect(get_response, 400)
@@ -76,7 +76,7 @@ def test_create_product_key_error(tester):
     assert message == "Missing price or/and product_name parameters"
 
 
-def test_create_product_value_error(tester):
+def test_create_product_value_error(tester) -> TestResponse:
     json = {"product_name": "Sprite", "price": "apple"}
     get_response = tester.create_product(json)
     assert Tester.expect(get_response, 400)
@@ -86,7 +86,7 @@ def test_create_product_value_error(tester):
     assert message == "Price entered is not a valid number"
 
 
-def test_create_product_already_exists(tester):
+def test_create_product_already_exists(tester) -> TestResponse:
     json = {"product_name": "Coke", "price": 100}
     get_response = tester.create_product(json)
     assert Tester.expect(get_response, 400)
@@ -96,7 +96,7 @@ def test_create_product_already_exists(tester):
     assert message == "Product already exists"
 
 
-def test_delete_product_success(tester):
+def test_delete_product_success(tester) -> TestResponse:
     json = {"product_id": "1"}
     get_response = tester.delete_product(json)
     assert Tester.expect(get_response, 200)
@@ -106,7 +106,7 @@ def test_delete_product_success(tester):
     assert message == "Product with id: '1' has been deleted"
 
 
-def test_delete_product_key_error(tester):
+def test_delete_product_key_error(tester) -> TestResponse:
     json = {"a": "a"}
     get_response = tester.delete_product(json)
     assert Tester.expect(get_response, 400)
@@ -116,7 +116,7 @@ def test_delete_product_key_error(tester):
     assert message == "Missing product_id parameter"
 
 
-def test_delete_product_wrong_id(tester):
+def test_delete_product_wrong_id(tester) -> TestResponse:
     json = {"product_id": 10}
     get_response = tester.delete_product(json)
     assert Tester.expect(get_response, 400)
@@ -126,7 +126,7 @@ def test_delete_product_wrong_id(tester):
     assert message == "No products that matches the id: '10'"
 
 
-def test_edit_product_success(tester):
+def test_edit_product_success(tester) -> TestResponse:
     json = {"product_id": 1, "product_name": "New Coke", "price": 5}
     get_response = tester.edit_product(json)
     assert Tester.expect(get_response, 200)
@@ -139,7 +139,7 @@ def test_edit_product_success(tester):
     assert product.get("product_price") == "5.00"
 
 
-def test_edit_product_key_error(tester):
+def test_edit_product_key_error(tester) -> TestResponse:
     json = {"a": "a", "b": "b", "c": "c"}
     get_response = tester.edit_product(json)
     assert Tester.expect(get_response, 400)
@@ -149,7 +149,7 @@ def test_edit_product_key_error(tester):
     assert message == "Missing product_id/price/product_name parameter"
 
 
-def test_edit_product_value_error(tester):
+def test_edit_product_value_error(tester) -> TestResponse:
     json = {"product_id": 1, "product_name": 3, "price": "c"}
     get_response = tester.edit_product(json)
     assert Tester.expect(get_response, 400)
@@ -159,7 +159,7 @@ def test_edit_product_value_error(tester):
     assert message == "Price entered is not a valid number"
 
 
-def test_edit_product_already_exists(tester):
+def test_edit_product_already_exists(tester) -> TestResponse:
     json = {"product_id": 2, "product_name": "Coke", "price": 10}
     get_response = tester.edit_product(json)
     assert Tester.expect(get_response, 400)
@@ -169,7 +169,7 @@ def test_edit_product_already_exists(tester):
     assert message == "Product with name: 'Coke' already belongs in the database"
 
 
-def test_edit_product_id_mismatch(tester):
+def test_edit_product_id_mismatch(tester) -> TestResponse:
     json = {"product_id": 10, "product_name": "a", "price": 10}
     get_response = tester.edit_product(json)
     assert Tester.expect(get_response, 400)

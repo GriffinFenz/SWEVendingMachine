@@ -21,15 +21,15 @@ class Products(db.Model):
     )
 
     @staticmethod
-    def find_by_id(product_id):
+    def find_by_id(product_id: int) -> "Products":
         return db.session.get(Products, {"product_id": product_id})
 
     @staticmethod
-    def find_by_name(product_name):
+    def find_by_name(product_name: str) -> "Products":
         return Products.query.filter(Products.product_name == product_name).first()
 
     @staticmethod
-    def add_product(product_name, product_price):
+    def add_product(product_name: str, product_price: int) -> bool:
         product_exists = Products.find_by_name(product_name)
         if product_exists is None:
             new_product = Products(
@@ -41,7 +41,7 @@ class Products(db.Model):
         return False
 
     @staticmethod
-    def remove_product(product_id):
+    def remove_product(product_id: int) -> bool:
         product_exists = Products.find_by_id(product_id)
         if product_exists is None:
             return False
@@ -52,7 +52,7 @@ class Products(db.Model):
     # Returns 1 is the machine to be changed does not exist, Return 2 if new name is a duplicate name,
     # 0 if everything worked
     @staticmethod
-    def edit_product(product_id, product_name, product_price):
+    def edit_product(product_id: int, product_name: str, product_price: int) -> int:
         product_to_change = Products.find_by_id(product_id)
         if product_to_change is None:
             return 1

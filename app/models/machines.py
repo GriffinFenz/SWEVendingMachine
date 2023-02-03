@@ -21,15 +21,15 @@ class Machines(db.Model):
     )
 
     @staticmethod
-    def find_by_id(machine_id):
+    def find_by_id(machine_id: int) -> "Machines":
         return db.session.get(Machines, {"machine_id": machine_id})
 
     @staticmethod
-    def find_by_name(machine_name):
+    def find_by_name(machine_name: str) -> "Machines":
         return Machines.query.filter(Machines.machine_name == machine_name).first()
 
     @staticmethod
-    def add_machine(machine_name, machine_location):
+    def add_machine(machine_name: str, machine_location: str) -> bool:
         machine_exists = Machines.find_by_name(machine_name)
         if machine_exists is None:
             new_machine = Machines(
@@ -41,7 +41,7 @@ class Machines(db.Model):
         return False
 
     @staticmethod
-    def remove_machine(machine_id):
+    def remove_machine(machine_id: int) -> bool:
         machine_exists = Machines.find_by_id(machine_id)
         if machine_exists is None:
             return False
@@ -52,7 +52,7 @@ class Machines(db.Model):
     # Returns 1 is the machine to be changed does not exist, Return 2 if new name is a duplicate name,
     # 0 if everything worked
     @staticmethod
-    def edit_machine(machine_id, machine_name, machine_location):
+    def edit_machine(machine_id: int, machine_name: str, machine_location: str) -> int:
         machine_to_change = Machines.find_by_id(machine_id)
         if machine_to_change is None:
             return 1

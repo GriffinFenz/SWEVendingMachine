@@ -4,7 +4,7 @@ from flask import Flask
 from app.extensions import db
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
 
     # /Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine

@@ -1,5 +1,6 @@
 import pytest
 from typing import Dict
+from werkzeug.test import TestResponse
 
 from tests.conftest import Tester
 
@@ -26,7 +27,7 @@ class MachineTester(Tester):
         return self.test_client.put("/machine/edit", json=json)
 
 
-def test_get_machine(tester):
+def test_get_machine(tester) -> TestResponse:
     get_response = tester.get_machine("1")
     assert Tester.expect(get_response, 200)
 
@@ -38,7 +39,7 @@ def test_get_machine(tester):
     assert machine.get("machine_location") == "here"
 
 
-def test_get_all_machines(tester):
+def test_get_all_machines(tester) -> TestResponse:
     get_response = tester.get_all_machines()
     assert Tester.expect(get_response, 200)
 
@@ -52,7 +53,7 @@ def test_get_all_machines(tester):
     assert machine_2.get("machine_location") == "there"
 
 
-def test_create_machine_success(tester):
+def test_create_machine_success(tester) -> TestResponse:
     json = {"machine_name": "Bob2", "location": "no"}
     get_response = tester.create_machine(json)
     assert Tester.expect(get_response, 200)
@@ -65,7 +66,7 @@ def test_create_machine_success(tester):
     assert machine.get("machine_location") == "no"
 
 
-def test_create_machine_fail_key_error(tester):
+def test_create_machine_fail_key_error(tester) -> TestResponse:
     json = {"a": "a", "location": "a"}
     get_response = tester.create_machine(json)
     assert Tester.expect(get_response, 400)
@@ -75,7 +76,7 @@ def test_create_machine_fail_key_error(tester):
     assert message == "Missing location or/and machine_name parameters"
 
 
-def test_create_machine_fail_exists(tester):
+def test_create_machine_fail_exists(tester) -> TestResponse:
     json = {"machine_name": "Bob", "location": "a"}
     get_response = tester.create_machine(json)
     assert Tester.expect(get_response, 400)
@@ -85,7 +86,7 @@ def test_create_machine_fail_exists(tester):
     assert message == "Machine already exists"
 
 
-def test_delete_machine_success(tester):
+def test_delete_machine_success(tester) -> TestResponse:
     json = {"machine_id": 2}
     get_response = tester.delete_machine(json)
     assert Tester.expect(get_response, 200)
@@ -95,7 +96,7 @@ def test_delete_machine_success(tester):
     assert message == "Machine with id: '2' has been deleted"
 
 
-def test_delete_machine_fail_key_error(tester):
+def test_delete_machine_fail_key_error(tester) -> TestResponse:
     json = {"a": 2}
     get_response = tester.delete_machine(json)
     assert Tester.expect(get_response, 400)
@@ -105,7 +106,7 @@ def test_delete_machine_fail_key_error(tester):
     assert message == "Missing machine_id parameter"
 
 
-def test_delete_machine_fail_not_found(tester):
+def test_delete_machine_fail_not_found(tester) -> TestResponse:
     json = {"machine_id": 60}
     get_response = tester.delete_machine(json)
     assert Tester.expect(get_response, 400)
@@ -115,7 +116,7 @@ def test_delete_machine_fail_not_found(tester):
     assert message == "No machines that matches the id: '60'"
 
 
-def test_edit_machine_success(tester):
+def test_edit_machine_success(tester) -> TestResponse:
     json = {"machine_id": 2, "machine_name": "NewBob", "location": "same place"}
     get_response = tester.edit_machine(json)
     assert Tester.expect(get_response, 200)
@@ -128,7 +129,7 @@ def test_edit_machine_success(tester):
     assert machine.get("machine_location") == "same place"
 
 
-def test_edit_machine_fail_key_error(tester):
+def test_edit_machine_fail_key_error(tester) -> TestResponse:
     json = {"machine_id": 1, "a": "a", "b": "b"}
     get_response = tester.edit_machine(json)
     assert Tester.expect(get_response, 400)
@@ -138,7 +139,7 @@ def test_edit_machine_fail_key_error(tester):
     assert message == "Missing machine_id/location/machine_name parameter"
 
 
-def test_edit_machine_fail_duplicate(tester):
+def test_edit_machine_fail_duplicate(tester) -> TestResponse:
     json = {"machine_id": 2, "machine_name": "Bob", "location": "no"}
     get_response = tester.edit_machine(json)
     assert Tester.expect(get_response, 400)
@@ -148,7 +149,7 @@ def test_edit_machine_fail_duplicate(tester):
     assert message == "Machine with name: 'Bob' already belongs in the database"
 
 
-def test_edit_machine_fail_not_found(tester):
+def test_edit_machine_fail_not_found(tester) -> TestResponse:
     json = {"machine_id": 60, "machine_name": "hi", "location": "no"}
     get_response = tester.edit_machine(json)
     assert Tester.expect(get_response, 400)

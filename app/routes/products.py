@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Response
 
 from app.models.products import Products
 
@@ -6,19 +6,19 @@ product_bp = Blueprint("products", __name__)
 
 
 @product_bp.route("/product", methods=["GET"])
-def get_product():
+def get_product() -> Response:
     product_id = request.args.get("id")
     product = Products.find_by_id(product_id)
     return jsonify(Product=product, STATUS_CODE=200)
 
 
 @product_bp.route("/all-products", methods=["GET"])
-def get_all_products():
+def get_all_products() -> Response:
     return jsonify(Product=Products.query.all(), STATUS_CODE=200)
 
 
 @product_bp.route("/product/create", methods=["POST"])
-def create_product():
+def create_product() -> Response:
     content = request.get_json(silent=True)
     try:
         price = int(content["price"])
@@ -42,7 +42,7 @@ def create_product():
 
 
 @product_bp.route("/product/delete", methods=["DELETE"])
-def delete_product():
+def delete_product() -> Response:
     content = request.get_json(silent=True)
     try:
         product_id = content["product_id"]
@@ -65,7 +65,7 @@ def delete_product():
 
 
 @product_bp.route("/product/edit", methods=["PUT"])
-def edit_product():
+def edit_product() -> Response:
     content = request.get_json(silent=True)
     try:
         product_id = content["product_id"]
