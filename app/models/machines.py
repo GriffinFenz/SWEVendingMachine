@@ -22,7 +22,7 @@ class Machines(db.Model):
 
     @staticmethod
     def find_by_id(machine_id):
-        return Machines.query.get(machine_id)
+        return db.session.get(Machines, {"machine_id": machine_id})
 
     @staticmethod
     def find_by_name(machine_name):

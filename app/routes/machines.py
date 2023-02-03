@@ -31,7 +31,7 @@ def create_machine():
         )
     # If machine exist then return machine else False run saying Machine exists
     if Machines.add_machine(machine_name, location):
-        return jsonify(Machines.find_by_name(machine_name), STATUS_CODE=200)
+        return jsonify(Machine=Machines.find_by_name(machine_name), STATUS_CODE=200)
     return jsonify(success=False, message="Machine already exists", STATUS_CODE=400)
 
 
@@ -54,6 +54,7 @@ def delete_machine():
     return jsonify(
         success=False,
         message=f"No machines that matches the id: '{machine_id}'",
+        STATUS_CODE=400,
     )
 
 
@@ -75,7 +76,7 @@ def edit_machine():
         return jsonify(
             success=False,
             message=f"Machine with name: '{machine_name}' already belongs in the database",
-            STATUS_CODE=200,
+            STATUS_CODE=400,
         )
     if output_check == 1:
         return jsonify(
@@ -83,4 +84,4 @@ def edit_machine():
             message=f"Machine with id: '{machine_id}' does not exist",
             STATUS_CODE=400,
         )
-    return jsonify(Machines.find_by_id(machine_id))
+    return jsonify(Machine=Machines.find_by_id(machine_id), STATUS_CODE=200)

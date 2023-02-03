@@ -28,6 +28,7 @@ def client(app):
 
 @dataclass
 class Tester:
+    __test__ = False
     test_client: FlaskClient
 
     @staticmethod

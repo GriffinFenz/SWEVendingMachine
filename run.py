@@ -1,4 +1,3 @@
-import app
 from app import create_app
 from app.models.testdb import run_db
 
