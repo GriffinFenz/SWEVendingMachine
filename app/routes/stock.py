@@ -26,7 +26,8 @@ def add_stock_in_machine():
         )
     if MachineStock.add_product_to_machine(product_id, machine_id, amount):
         return jsonify(
-            MachineStock.find_by_ids(product_id, machine_id), STATUS_CODE=200
+            MachineStock=MachineStock.find_by_ids(product_id, machine_id),
+            STATUS_CODE=200,
         )
     return jsonify(
         success=False,
@@ -56,7 +57,8 @@ def edit_stock_in_machine():
         )
     if MachineStock.edit_stock(product_id, machine_id, amount):
         return jsonify(
-            MachineStock.find_by_ids(product_id, machine_id), STATUS_CODE=200
+            MachineStock=MachineStock.find_by_ids(product_id, machine_id),
+            STATUS_CODE=200,
         )
     return jsonify(
         success=False,
