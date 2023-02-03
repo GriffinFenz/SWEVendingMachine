@@ -9,7 +9,7 @@ def create_app():
 
     # /Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine
     cred = yaml.load(
-        open("/Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine/cred.yaml"),
+        open("./cred.yaml"),
         Loader=yaml.Loader,
     )  # Fix this line
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
