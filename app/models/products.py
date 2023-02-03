@@ -22,7 +22,7 @@ class Products(db.Model):
 
     @staticmethod
     def find_by_id(product_id):
-        return Products.query.get(product_id)
+        return db.session.get(Products, {"product_id": product_id})
 
     @staticmethod
     def find_by_name(product_name):

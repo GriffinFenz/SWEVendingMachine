@@ -5,16 +5,16 @@ from app.models.products import Products
 product_bp = Blueprint("products", __name__)
 
 
-@product_bp.route("/product/", methods=["GET"])
+@product_bp.route("/product", methods=["GET"])
 def get_product():
     product_id = request.args.get("id")
     product = Products.find_by_id(product_id)
-    return jsonify(product, STATUS_CODE=200)
+    return jsonify(Product=product, STATUS_CODE=200)
 
 
-@product_bp.route("/all-products/", methods=["GET"])
+@product_bp.route("/all-products", methods=["GET"])
 def get_all_products():
-    return jsonify(Products.query.all(), STATUS_CODE=200)
+    return jsonify(Product=Products.query.all(), STATUS_CODE=200)
 
 
 @product_bp.route("/product/create", methods=["POST"])
@@ -37,7 +37,7 @@ def create_product():
         )
     # If product exist then return product else False run saying Product exists
     if Products.add_product(product_name, price):
-        return jsonify(Products.find_by_name(product_name), STATUS_CODE=400)
+        return jsonify(Product=Products.find_by_name(product_name), STATUS_CODE=200)
     return jsonify(success=False, message="Product already exists", STATUS_CODE=400)
 
 
@@ -96,4 +96,4 @@ def edit_product():
             message=f"Product with id: '{product_id}' does not exist",
             STATUS_CODE=400,
         )
-    return jsonify(Products.find_by_id(product_id), STATUS_CODE=200)
+    return jsonify(Product=Products.find_by_id(product_id), STATUS_CODE=200)
