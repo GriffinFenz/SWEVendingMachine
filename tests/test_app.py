@@ -14,7 +14,7 @@ class AppTester(Tester):
         return self.test_client.get("/")
 
 
-def test_get_all_machines(tester) -> TestResponse:
+def test_app_success(tester) -> TestResponse:
     get_response = tester.index()
     assert Tester.expect(get_response, 200)
     assert get_response.json.get("success")
