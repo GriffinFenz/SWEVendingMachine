@@ -1,8 +1,8 @@
-from flask import render_template, request, jsonify, Blueprint
+from flask import Blueprint, jsonify, Response
 
 bp = Blueprint("app", __name__)
 
 
 @bp.route("/")
-def index():
-    return render_template("index.html")
+def index() -> Response:
+    return jsonify(success=True, STATUS_CODE=200)
