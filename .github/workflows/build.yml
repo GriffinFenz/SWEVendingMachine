@@ -53,7 +53,7 @@ jobs:
         run: echo "${{ secrets.SECRET }}" > cred.yaml
 
       - name: Create database
-        run: docker run -p ${{ secrets.DOCKER_PORT }} --name vendingmachindb -e MYSQL_ROOT_PASSWORD=${{ secrets.PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DOCKER_DATABASE_NAME }} -d --restart=always mysql
+        run: docker run -p 3306:3306 --name vendingmachindb -e MYSQL_ROOT_PASSWORD=${{ secrets.PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DOCKER_DATABASE_NAME }} -d --restart=always mysql
 
       - name: Install Poetry
         run: |
