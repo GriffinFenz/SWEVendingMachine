@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from app.extensions import db
 
 import pytest
 from flask import Response
@@ -11,12 +10,13 @@ from app.models.testdb import run_db
 
 @pytest.fixture()
 def app():
-    app = create_app(db)
+    app = create_app()
     run_db(app)
 
     app.config.update(
         {
             "TESTING": True,
+            "WTF_CSRF_CHECK_DEFAULT": False,
         }
     )
 

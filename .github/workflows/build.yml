@@ -52,6 +52,9 @@ jobs:
       - name: Create yaml
         run: echo "${{ secrets.SECRET }}" > cred.yaml
 
+      - name: Create database
+        run: docker run -p ${{ secrets.DOCKER_PORT }} --name vendingmachindb -e MYSQL_ROOT_PASSWORD=${{ secrets.PASSWORD }} -e MYSQL_DATABASE=${{ secrets.DOCKER_DATABASE_NAME }} -d --restart=always mysql
+
       - name: Install Poetry
         run: |
           curl -sL https://install.python-poetry.org | POETRY_VERSION=${{ env.POETRY_VERSION }} python - -y
