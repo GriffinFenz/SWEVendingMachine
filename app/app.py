@@ -5,4 +5,4 @@ bp = Blueprint("app", __name__)
 
 @bp.route("/")
 def index() -> Response:
-    return jsonify(success=True)
+    return jsonify(success=True, STATUS_CODE=200)
