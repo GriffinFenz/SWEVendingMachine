@@ -1,0 +1,35 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    container_name: app-database
+    environment:
+      - MYSQL_ROOT_PASSWORD=iccsroot
+      - MYSQL_DATABASE=VendingMachine
+    ports:
+      - "13310:3306"
+    restart: always
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - vending-network
+  test-mysql:
+    image: mysql
+    container_name: app-test-database
+    environment:
+      - MYSQL_ROOT_PASSWORD=iccsroottest
+      - MYSQL_DATABASE=VendingMachineTest
+    ports:
+      - "13311:3306"
+    restart: always
+    volumes:
+      - test-mysql-data:/var/lib/mysql
+    networks:
+      - vending-network
+
+volumes:
+  mysql-data:
+  test-mysql-data:
+
+networks:
+  vending-network:
