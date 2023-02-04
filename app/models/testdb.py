@@ -27,6 +27,3 @@ def run_db(flask_app):
         db.session.add(stock2)
         db.session.add(stock3)
         db.session.commit()
-
-        # Products.query.filter_by(product_id=2).delete()
-        # db.session.commit()

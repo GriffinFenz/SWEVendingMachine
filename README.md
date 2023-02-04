@@ -1,5 +1,5 @@
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=GriffinFenz_SWEVendingMachine&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=GriffinFenz_SWEVendingMachine)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GriffinFenz_SWEVendingMachine&metric=coverage)](https://sonarcloud.io/summary/new_code?id=GriffinFenz_SWEVendingMachine)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=GriffinFenz_SWEVendingMachine&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=GriffinFenz_SWEVendingMachine)
 
 # Vending Machine Project
 By: Naphong Chadha 6380797
