@@ -1,6 +1,5 @@
 import yaml
 from flask import Flask
-
 from app.extensions import db
 
 
@@ -8,7 +7,7 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     cred = yaml.load(
-        open("/cred.yaml"),
+        open("./cred.yaml"),
         Loader=yaml.Loader,
     )
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
