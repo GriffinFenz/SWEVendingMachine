@@ -1,9 +1,8 @@
 import yaml
 from flask import Flask
-from app.extensions import db
 
 
-def create_app() -> Flask:
+def create_app(innerdb) -> Flask:
     app = Flask(__name__)
 
     cred = yaml.load(
@@ -22,7 +21,7 @@ def create_app() -> Flask:
     ] = f"mysql+pymysql://{user}:{password}@{host}/{db_name}"
 
     # Registered db
-    db.init_app(app=app)
+    innerdb.init_app(app=app)
 
     from app.app import bp as main_bp
     from app.routes.machines import machine_bp
