@@ -1,12 +1,12 @@
 import yaml
 from flask import Flask
-from app.extensions import csrf, db
+from app.extensions import db
 
 
 def create_app() -> Flask:
     app = Flask(__name__)
 
-    csrf.init_app(app=app)
+    # csrf.init_app(app=app)
 
     cred = yaml.load(
         open("./cred.yaml"),

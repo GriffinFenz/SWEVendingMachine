@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from app.extensions import db
+from app.models.stock_record import take_snapshot
 
 
 @dataclass
@@ -21,12 +22,13 @@ class MachineStock(db.Model):
 
     @staticmethod
     def find_by_ids(machine_id: int, product_id: int) -> "MachineStock":
-        return MachineStock.query.filter(
+        return MachineStock.query.filter(  # noqa: E303
             MachineStock.machine_id == {machine_id},
             MachineStock.product_id == {product_id},
         ).first()
 
     @staticmethod
+    @take_snapshot
     def add_product_to_machine(machine_id: int, product_id: int, amount: int) -> bool:
         stock_exists = MachineStock.find_by_ids(machine_id, product_id)
         if stock_exists is None:
@@ -39,6 +41,7 @@ class MachineStock(db.Model):
         return False
 
     @staticmethod
+    @take_snapshot
     def edit_stock(product_id: int, machine_id: int, amount: int) -> bool:
         stock_exists = MachineStock.find_by_ids(machine_id, product_id)
         if stock_exists is not None:
