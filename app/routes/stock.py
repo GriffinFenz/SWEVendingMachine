@@ -24,7 +24,9 @@ def add_stock_in_machine():
             message="Amount entered is not a valid number",
             STATUS_CODE=400,
         )
-    if MachineStock.add_product_to_machine(product_id, machine_id, amount):
+    if MachineStock.add_product_to_machine(
+        machine_id=machine_id, product_id=product_id, amount=amount
+    ):
         return jsonify(
             MachineStock=MachineStock.find_by_ids(product_id, machine_id),
             STATUS_CODE=200,
@@ -55,7 +57,9 @@ def edit_stock_in_machine():
             message="Amount entered is not a valid number",
             STATUS_CODE=400,
         )
-    if MachineStock.edit_stock(product_id, machine_id, amount):
+    if MachineStock.edit_stock(
+        machine_id=machine_id, product_id=product_id, amount=amount
+    ):
         return jsonify(
             MachineStock=MachineStock.find_by_ids(product_id, machine_id),
             STATUS_CODE=200,
