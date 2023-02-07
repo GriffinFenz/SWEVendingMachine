@@ -35,7 +35,7 @@ class StockRecord(db.Model):
             MachineStock, {"machine_id": int(machine_id), "product_id": int(product_id)}
         )
 
-        snapshot_time = datetime.today().replace(microsecond=0)
+        snapshot_time: datetime = datetime.today().replace(microsecond=0)
 
         stock_record_exists = db.session.get(
             StockRecord,
@@ -47,7 +47,7 @@ class StockRecord(db.Model):
         )
 
         if machine_stock_exists:
-            quantity = machine_stock_exists.stock_quantity
+            quantity: int = machine_stock_exists.stock_quantity
 
             if stock_record_exists:
                 stock_record_exists.stock_quantity = quantity
