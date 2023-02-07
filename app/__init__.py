@@ -8,6 +8,7 @@ def create_app() -> Flask:
 
     csrf.init_app(app=app)
 
+    # /Users/naphong/Desktop/Uni/softwareeng/SWEVendingMachine/cred.yaml
     cred = yaml.load(
         open("./cred.yaml"),
         Loader=yaml.Loader,

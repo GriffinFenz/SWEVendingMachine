@@ -13,7 +13,9 @@ def get_product_time_stamp_in_records() -> Response:
 
     if records:
         return jsonify(Records=records, STATUS_CODE=200)
-    return jsonify(STATUS_CODE=400)
+    return jsonify(
+        message=f"Stock with product id: '{product_id}' not found", STATUS_CODE=400
+    )
 
 
 @record_bp.route("/machine/records", methods=["GET"])
@@ -24,4 +26,6 @@ def get_machine_time_stamp_in_records() -> Response:
 
     if records:
         return jsonify(Records=records, STATUS_CODE=200)
-    return jsonify(STATUS_CODE=400)
+    return jsonify(
+        message=f"Stock with machine id: '{machine_id}' not found", STATUS_CODE=400
+    )
