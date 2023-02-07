@@ -10,7 +10,7 @@ class StockRecord(db.Model):
     machine_id: int
     product_id: int
     snapshot_time: datetime
-    stock_amount: int
+    stock_quantity: int
 
     machine_id = db.Column(
         db.Integer,
@@ -25,24 +25,40 @@ class StockRecord(db.Model):
     snapshot_time = db.Column(
         db.DateTime, primary_key=True, default=datetime.now(), nullable=False
     )
-    stock_amount = db.Column(db.Integer, nullable=False)
+    stock_quantity = db.Column(db.Integer, nullable=False)
 
     @staticmethod
     def snapshot(machine_id: int, product_id: int):
         from app.models.machine_stock import MachineStock
 
-        machine_stock = db.session.get(
+        machine_stock_exists = db.session.get(
             MachineStock, {"machine_id": int(machine_id), "product_id": int(product_id)}
         )
 
-        if machine_stock:
-            stock_record = StockRecord(
-                machine_id=machine_id,
-                product_id=product_id,
-                stock_amount=machine_stock.stock_quantity,
-                snapshot_time=datetime.now(),
-            )
-            db.session.add(stock_record)
+        snapshot_time = datetime.today().replace(microsecond=0)
+
+        stock_record_exists = db.session.get(
+            StockRecord,
+            {
+                "machine_id": int(machine_id),
+                "product_id": int(product_id),
+                "snapshot_time": snapshot_time,
+            },
+        )
+
+        if machine_stock_exists:
+            quantity = machine_stock_exists.stock_quantity
+
+            if stock_record_exists:
+                stock_record_exists.stock_quantity = quantity
+            else:
+                stock_record = StockRecord(
+                    machine_id=machine_id,
+                    product_id=product_id,
+                    stock_quantity=quantity,
+                    snapshot_time=snapshot_time,
+                )
+                db.session.add(stock_record)
             db.session.commit()
 
     @staticmethod
