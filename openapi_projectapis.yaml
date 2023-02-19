@@ -1,0 +1,724 @@
+openapi: "3.0.2"
+info:
+  title: Vending Machine APIs
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+  - url: https://api.server.test/v2
+tags:
+  - name: machines
+    description: Everything about Vending Machines
+  - name: products
+    description: Everything about Products
+  - name: stock
+    description: Stocks in Vending Machines
+paths:
+  /machine?id=<machine_id>:
+    get:
+      tags:
+        - machines
+      summary: View one machine
+      description: View a Vending Machine information based on the Id
+      parameters:
+        - name: machine_id
+          in: query
+          description: Machine id
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine'
+
+  /all-machines:
+    get:
+      tags:
+        - machines
+      summary: View all machines
+      description: View every single Vending Machine information in the database
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/all-machines'
+
+  /machine/create:
+    post:
+      tags:
+        - machines
+      summary: Create machine
+      description: Adds a new Vending Machine given name and location
+      requestBody:
+        description: Create a new vending machine
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/machine-create'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-create-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-create-fail'
+
+  /machine/delete:
+    delete:
+      tags:
+        - machines
+      summary: Delete machine
+      description: Deletes an existing Vending Machine given the machine id
+      requestBody:
+        description: Deletes an existing vending machine
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/machine-delete'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-delete-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-delete-fail'
+
+  /machine/edit:
+    put:
+      tags:
+        - machines
+      summary: Edit machine
+      description: Change the machine name or machine location of an existing vending machine based on machine id
+      requestBody:
+        description: Updates a machine name and location
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/machine-edit'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-edit-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-edit-fail'
+
+  /product?id=<product_id>:
+    get:
+      tags:
+        - products
+      summary: View a product
+      description: View a Product's information based on the Id
+      parameters:
+        - name: product_id
+          in: query
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+
+  /all-products:
+    get:
+      tags:
+        - products
+      summary: View all products
+      description: View every single Product's information
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/all-products'
+
+  /product/create:
+    post:
+      tags:
+        - products
+      summary: Create product
+      description: Adds a new product given name and price
+      requestBody:
+        description: Create a new product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-create'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-create-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-create-fail'
+
+  /product/delete:
+    delete:
+      tags:
+        - products
+      summary: Delete product
+      description: Deletes an existing Product given the product id
+      requestBody:
+        description: Deletes an existing product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-delete'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-delete-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-delete-fail'
+
+  /product/edit:
+    put:
+      tags:
+        - products
+      summary: Edit product
+      description: Change the product name or product price of an existing product based on product id
+      requestBody:
+        description: Updates a product name and price
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product-edit'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-edit-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-edit-fail'
+
+  /stock/add:
+    post:
+      tags:
+        - stock
+      summary: Add stock
+      description: Adds an existing product to an existing vending machine based on the product id, machine id and quantity
+      requestBody:
+        description: Adds product to machine
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/add-stock'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/add-stock-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/add-stock-fail'
+
+  /stock/edit:
+    put:
+      tags:
+        - stock
+      summary: Edit stock
+      description: Edit an existing stock by changing the amount of a product in a machine
+      requestBody:
+        description: Edit stock
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/edit-stock'
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edit-stock-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/edit-stock-fail'
+
+  /product/records?id=<product_id>:
+    get:
+      tags:
+        - stock
+      summary: Get product records
+      description: Gets the timestamps of all transactions of a specific product based on product id
+      parameters:
+        - name: product_id
+          in: query
+          description: Product id
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-record-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-record-fail'
+
+  /machine/records?id=<machine_id>:
+    get:
+      tags:
+        - stock
+      summary: Get machine records
+      description: Gets the timestamps of all transactions of a specific machine based on machine id
+      parameters:
+        - name: machine_id
+          in: query
+          description: Machine id
+          required: true
+          schema:
+            type: integer
+            default: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-record-success'
+        "400":
+          description: Error Occurred
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/machine-record-fail'
+
+
+
+components:
+  schemas:
+    machine:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        machine_name:
+          type: string
+          example: "Bob"
+        machine_location:
+          type: string
+          example: "Old Building"
+
+    all-machines:
+      type: array
+      items:
+        type: object
+      properties:
+        machine_id:
+          type: integer
+        machine_name:
+          type: string
+        machine_location:
+          type: string
+      example:
+        - machine_id: 1
+          machine_name: "Bob"
+          machine_location: "Old Building"
+        - machine_id: 2
+          machine_name: "Bob2"
+          machine_location: "Old Building too"
+
+    machine-create:
+      type: object
+      properties:
+        machine_name:
+          type: string
+          example: "Bob3"
+        location:
+          type: string
+          example: "Old Building 3"
+
+    machine-create-success:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 3
+        machine_name:
+          type: string
+          example: "Bob3"
+        machine_location:
+          type: string
+          example: "Old Building 3"
+
+    machine-create-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    machine-delete:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+
+    machine-delete-success:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: True
+        message:
+          type: string
+          example: "Machine with id: '1' has been deleted"
+
+    machine-delete-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    machine-edit:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        machine_name:
+          type: string
+          example: "New Bob"
+        location:
+          type: string
+          example: "New location"
+
+    machine-edit-success:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        machine_name:
+          type: string
+          example: "New Bob"
+        machine_location:
+          type: string
+          example: "New location"
+
+    machine-edit-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    product:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: "Coke"
+        product_price:
+          type: integer
+          example: 15
+
+    all-products:
+      type: array
+      items:
+        type: object
+      properties:
+        product_id:
+          type: integer
+        product_name:
+          type: string
+        product_price:
+          type: string
+      example:
+        - product_id: 1
+          product_name: "Coke"
+          product_price: 15
+        - product_id: 2
+          product_name: "Sprite"
+          product_price: 18
+
+    product-create:
+      type: object
+      properties:
+        product_name:
+          type: string
+          example: "Vodka"
+        price:
+          type: integer
+          example: 100
+
+    product-create-success:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 3
+        product_name:
+          type: string
+          example: "Vodka"
+        product_price:
+          type: string
+          example: 100
+
+    product-create-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    product-delete:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+
+    product-delete-success:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: True
+        message:
+          type: string
+          example: "Product with id: '1' has been deleted"
+
+    product-delete-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    product-edit:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: "Coke Zero"
+        price:
+          type: string
+          example: 30
+
+    product-edit-success:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          example: 1
+        product_name:
+          type: string
+          example: "Coke Zero"
+        product_price:
+          type: string
+          example: 30
+
+    product-edit-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: False
+
+    add-stock:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        amount:
+          type: integer
+          example: 20
+
+    add-stock-success:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        stock_quantity:
+          type: integer
+          example: 20
+
+    add-stock-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+
+    edit-stock:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        amount:
+          type: integer
+          example: 20
+
+    edit-stock-success:
+      type: object
+      properties:
+        machine_id:
+          type: integer
+          example: 1
+        product_id:
+          type: integer
+          example: 1
+        stock_quantity:
+          type: integer
+          example: 20
+
+    edit-stock-fail:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+
+    product-record-success:
+      type: object
+      properties:
+        Records:
+          type: array
+          items:
+            type: object
+          properties:
+            machine_id:
+              type: integer
+            product_id:
+              type: integer
+            snapshot_time:
+              type: string
+            stock_quantity:
+              type: integer
+          example:
+            - machine_id: 1
+              product_id: 1
+              snapshot_time: "Tue, 07 Feb 2023 21:55:23 GMT"
+              stock_quantity: 77
+            - machine_id: 4
+              product_id: 1
+              snapshot_time: "Wed 08 Feb 2023 00:00:00 GMT"
+              stock_quantity: 60
+
+    product-record-fail:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Stock with product id: '1' not found"
+
+    machine-record-success:
+      type: object
+      properties:
+        Records:
+          type: array
+          items:
+            type: object
+          properties:
+            machine_id:
+              type: integer
+            product_id:
+              type: integer
+            snapshot_time:
+              type: string
+            stock_quantity:
+              type: integer
+          example:
+            - machine_id: 1
+              product_id: 1
+              snapshot_time: "Tue, 07 Feb 2023 21:55:23 GMT"
+              stock_quantity: 77
+            - machine_id: 1
+              product_id: 4
+              snapshot_time: "Wed 08 Feb 2023 00:00:00 GMT"
+              stock_quantity: 60
+
+    machine-record-fail:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Stock with machine id: '1' not found"
